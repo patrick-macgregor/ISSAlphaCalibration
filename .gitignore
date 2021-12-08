@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# MY CHANGES
+lib/
+bin/
+hide/
+*.root
