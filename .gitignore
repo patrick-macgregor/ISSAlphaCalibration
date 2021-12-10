@@ -36,3 +36,5 @@ lib/
 bin/
 hide/
 *.root
+*.pcm
+iss_alpha_calibrationDict.cc

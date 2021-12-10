@@ -5,20 +5,32 @@
 #include <TString.h>
 
 #include "AlphaCalibrationGlobals.hh"
+#include "AlphaSpectrumFitter.hh"
 #include "AlphaSpectrumGenerator.hh"
+#include "AlphaSpectrumManipulator.hh"
 #include "ChainMaker.hh"
 
 int main( int argc, char *argv[] ){
 
-	// Make the chain
+	// Define the variables that characterise each stage
+	TString output_name_chain = "alpha_chain.root";
+	TString output_name_hists = "alpha_hists.root";
+	TString output_name_hists_fit = "alpha_hists_fit.root";
+	
+	// Define tester file
+	TFile *fTest;
+
+
+
+	// STAGE 1: MAKE THE TCHAIN
 	std::cout << "\n +++ ISS Analysis:: Making TChain +++" << std::endl;
 	
-	TString output_name_chain = "alpha_chain.root";
-	TFile *fTest = new TFile( output_name_chain, "READ" );
+	// Run test file check
+	fTest = new TFile( output_name_chain, "READ" );
 	
 	// Check if file already exists, and only run if it doesn't
-	if ( !fTest->IsOpen() ){
-		std::cout << "Making " << output_name_chain << std::endl;
+	if ( fTest->IsOpen() == 0 ){
+		std::cout << "Creating " << output_name_chain << std::endl;
 		ChainMaker chainmaker( argc, argv );
 		chainmaker.SetOutputFile( output_name_chain );
 		chainmaker.MakeChain();
@@ -30,29 +42,61 @@ int main( int argc, char *argv[] ){
 		fTest->Close();
 	}
 
-	// Now generate all of the alpha spectra from these files
+
+
+	// STAGE 2: GENERATE THE ALPHA SPECTRA
 	std::cout << "\n +++ ISS Analysis:: Generating alpha spectra +++" << std::endl;
-	AlphaSpectrumGenerator al_spec_gen;
-	al_spec_gen.SetInputFile( "alpha_chain.root" );
-	al_spec_gen.SetOutputFile( "alpha_hists.root" );
-	al_spec_gen.PopulateSpectra();
-	al_spec_gen.LabelEmptySpectra();
-	al_spec_gen.WriteSpectraToFile();
+	
+	// Run test file check
+	fTest = new TFile( output_name_hists, "READ" );
+	
+	// Check if file already exists, and only run if it doesn't
+	if ( fTest->IsOpen() == 0 ){
+		std::cout << "Creating " << output_name_hists << std::endl;
+		
+		// Generate the spectra
+		AlphaSpectrumGenerator al_spec_gen;
+		al_spec_gen.SetInputFile( output_name_chain );
+		al_spec_gen.SetOutputFile( output_name_hists );
+		al_spec_gen.PopulateSpectra();
+		al_spec_gen.LabelEmptySpectra();
+		al_spec_gen.WriteSpectraToFile();
+		al_spec_gen.CloseOutput();
+	}
+	else{
+		std::cout << output_name_hists << " already exists. Moving on..." << std::endl;
+		fTest->Close();
+	}
+	
+	
+	
+	// STAGE 3: FIT THE ALPHA SPECTRA
+	std::cout << "\n +++ ISS Analysis:: Fitting alpha spectra +++" << std::endl;
+	
+	// Run test file check
+	fTest = new TFile( output_name_hists_fit, "READ" );
+	
+	// Check if file already exists, and only run if it doesn't
+	if ( fTest->IsOpen() == 0 ){
+		std::cout << "Creating " << output_name_hists_fit << std::endl;
+		AlphaSpectrumFitter al_spec_fit;
+		al_spec_fit.SetInputFile( output_name_hists );
+		al_spec_fit.SetOutputFile( output_name_hists_fit );
+		al_spec_fit.GetSpectra();
+		al_spec_fit.FitSpectra();
+		/*al_spec_fit.WriteFitsToFile();*/
+		
+	}
+	else{
+		std::cout << output_name_hists_fit << " already exists. Moving on..." << std::endl;
+		fTest->Close();
+	}
+	
+	
 	
 /*		
 
 	TODO
-	
-	// Run checks to see if spectra already generated
-	AlphaSpectrumGenerator al_spec_gen( alpha_chain );
-	al_spec_gen.Initialise();
-	al_spec_gen.SetOutput(output_file);
-	al_spec_gen.PopulateSpectra();
-	al_spec_gen.PurgeEmptySpectra();
-	al_spec_gen.WriteSpectraToFile();
-	
-	
-	std::cout << "\n +++ ISS Analysis:: Fitting alpha spectra +++" << std::endl;
 	// Run checks to see if spectra already fitted
 	AlphaSpectrumFitter al_spec_fit;
 	al_spec_fit.SetInputFile( input_file );

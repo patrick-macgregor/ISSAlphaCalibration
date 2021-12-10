@@ -1,7 +1,6 @@
 #ifndef _ALPHA_CALIBRATION_GLOBALS_HH_
 #define _ALPHA_CALIBRATION_GLOBALS_HH_
 
-
 #include <TString.h>
 #include <vector>
 
@@ -9,14 +8,25 @@
 // ISS Array Info
 const int NumberOfArrayModules = 3;
 const int NumberOfArrayASICs = 6;
-const bool ASICIsPSide[NumberOfArrayASICs] = { 1, 0, 1, 1, 0, 1 };
+//const bool ASICIsPSide[NumberOfArrayASICs] = { 1, 0, 1, 1, 0, 1 };
 const int NumberOfPArrayChannels = 128;
-const int NumberOfNArrayChannels = 11;
-const int NumberOfNPerASIC = 4;
-const int NSideChannelStart[NumberOfNPerASIC] = { 11, 28, 89, 106 };
+//const int NumberOfNArrayChannels = 11;
+//const int NumberOfNPerASIC = 4;
+//const int NSideChannelStart[NumberOfNPerASIC] = { 11, 28, 89, 106 };
 
 // Alpha source particulars
 const int NumberOfAlphaPeaks = 4;
 const int AlphaPeakWidthEstimate = 20; // Rough estimate of peak width in channels (so you don't select local maxima)
+
+
+// HISTOGRAM FUNCTIONS
+TString SpectrumNameGenerator( unsigned char mod, unsigned char asic, unsigned char ch );
+TString SpectrumTitleGenerator( unsigned char mod, unsigned char asic, unsigned char ch );
+
+const int gAlphaHistNumBins = 325;
+const int gAlphaHistLB = 0;
+const int gAlphaHistUB = 6500;
+
+
 
 #endif

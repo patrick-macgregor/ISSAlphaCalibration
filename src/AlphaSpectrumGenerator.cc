@@ -1,61 +1,7 @@
 #include "AlphaSpectrumGenerator.hh"
 
-// --------------------------------------------------------------------------------------------- //
-AlphaSpectrum::AlphaSpectrum(){
-	fChannel = 0;
-	fModule = 0;
-	fAsic = 0;
-	fIsEmpty = 0;
-	fHist = NULL;
-}
-// --------------------------------------------------------------------------------------------- //
-AlphaSpectrum::AlphaSpectrum( int mod, int asic, int ch ){
-	fChannel = ch;
-	fModule = mod;
-	fAsic = asic;
-	fIsEmpty = 0;
-	CreateHistogram();
-}
-// --------------------------------------------------------------------------------------------- //
-AlphaSpectrum::~AlphaSpectrum(){}
-// --------------------------------------------------------------------------------------------- //
-void AlphaSpectrum::CreateHistogram(){
-	bool new_hist_needed = 0;
-	if ( fHist == NULL ){
-		new_hist_needed = 1;
-	}
-	else if ( fHist->IsOnHeap() ){
-		fHist->Delete();
-		std::cout << "Deleted old histogram" << std::endl;
-		new_hist_needed = 1;
-	}
-
-	if ( new_hist_needed ){
-		fHist = new TH1F( \
-			Form( "alpha_spectrum_%i_%i_%i", fModule, fAsic, fChannel ), \
-			Form( "Mod. %i | Asic %i | Ch. %i", fModule, fAsic, fChannel ), \
-			325, 0, 6500 \
-		);
-		
-		// TODO histogram formatting here
-	}
-	return;
-}
-// --------------------------------------------------------------------------------------------- //
-void AlphaSpectrum::CheckIsEmpty(){
-	if ( fHist->GetEntries() == 0 ){
-		fIsEmpty = 1;
-	}
-	else{
-		fIsEmpty = 0;
-	}
-	return;
-}
-// ============================================================================================= //
 AlphaSpectrumGenerator::AlphaSpectrumGenerator(){
 	Initialise();
-	fInputFile = NULL;
-	fOutputFile = NULL;
 }
 // --------------------------------------------------------------------------------------------- //
 AlphaSpectrumGenerator::~AlphaSpectrumGenerator(){}
@@ -75,25 +21,6 @@ void AlphaSpectrumGenerator::Initialise(){
 			}
 		}		
 	}
-	return;
-}
-// --------------------------------------------------------------------------------------------- //
-void AlphaSpectrumGenerator::SetFile( TString file, TFile*& f, TString file_open_state ){
-	f = new TFile( file, file_open_state );
-	std:: cout << f->GetName() << " created." << std::endl;
-	if ( !f->IsOpen() ){
-		std::cerr << "Alpha spectrum file " << file << " failed to open." << std::endl;
-	}
-	return;
-}
-// --------------------------------------------------------------------------------------------- //
-void AlphaSpectrumGenerator::SetInputFile( TString file ){
-	SetFile( file, fInputFile, "READ" );
-	return;
-}
-// --------------------------------------------------------------------------------------------- //
-void AlphaSpectrumGenerator::SetOutputFile(  TString file  ){
-	SetFile( file, fOutputFile, "RECREATE" );
 	return;
 }
 // --------------------------------------------------------------------------------------------- //
@@ -165,7 +92,7 @@ void AlphaSpectrumGenerator::PopulateSpectra(){
 		if ( bAllDataAreGood ){
 			// Loop over all data points in array (which probably has a length of 1!)
 			for ( unsigned int j = 0; j < tree_channel.GetSize(); j++ ){
-				fAlphaSpectrumVector[ tree_mod.At(j) ][ tree_asic.At(j) ][ tree_channel.At(j) ]->Fill( tree_energy.At(j) );
+				fAlphaSpectrumVector[ tree_mod.At(j) ][ tree_asic.At(j) ][ tree_channel.At(j) ]->FillHistogram( tree_energy.At(j) );
 			}
 			
 		}
@@ -193,15 +120,14 @@ void AlphaSpectrumGenerator::WriteSpectraToFile(){
 		for ( unsigned int j = 0; j < fAlphaSpectrumVector[i].size(); j++ ){
 			for ( unsigned int k = 0; k < fAlphaSpectrumVector[i][j].size(); k++ ){
 				if ( !fAlphaSpectrumVector[i][j][k]->IsEmpty() ){
-					fAlphaSpectrumVector[i][j][k]->Write();	
+					fOutputFile->WriteTObject( fAlphaSpectrumVector[i][j][k] );	
 				}
 			}
 		}
 	}
 	return;
 }
-// --------------------------------------------------------------------------------------------- //
-void AlphaSpectrumGenerator::CloseOutput(){}
+
 
 
 
