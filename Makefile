@@ -84,3 +84,6 @@ iss_alpha_calibrationDict.cc: $(DEPENDENCIES) $(INC_DIR)/RootLinkDef.h
 
 clean:
 	rm -vf $(BIN_DIR)/iss_alpha_calibration $(SRC_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*.gch *.o $(BIN_DIR)/*.pcm *.pcm $(BIN_DIR)/*Dict* *Dict* $(LIB_DIR)/* alpha*.root
+	
+root:
+	rm alpha*.root

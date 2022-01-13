@@ -20,7 +20,11 @@ class AlphaSpectrumFitter : public AlphaSpectrumManipulator{
 		~AlphaSpectrumFitter();
 		
 		void GetSpectra();
-		void FitSpectra();
+		void FindPeaks();
+		void SortPeaks();
+		void DiscardBadPeaks();
+		void GenerateFits();
+		void FitPeaks();
 		void WriteFitsToFile();
 
 	ClassDef( AlphaSpectrumFitter, 1 );

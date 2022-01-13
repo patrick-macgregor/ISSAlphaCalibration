@@ -25,9 +25,97 @@ void AlphaSpectrumFitter::GetSpectra(){
 	return;
 }
 // --------------------------------------------------------------------------------------------- //
-void AlphaSpectrumFitter::FitSpectra(){
-	std::cout << "This is where the magic happens!" << std::endl;
+void AlphaSpectrumFitter::FindPeaks(){
+	TH1F *h;
+	std::vector<std::vector<int>> peak_info;	// First index is the height, second index is the channel
+	std::vector<int> individual_peak;
+	individual_peak.resize(2);
+	
+	// Loop over vector
+	for ( unsigned int i = 0; i < fAlphaSpectrumVector.size(); i++ ){
+		// Get the histogram
+		h = fAlphaSpectrumVector[i]->GetHist();
+		
+		// Reset peak estimates
+		individual_peak[0] = 0;
+		individual_peak[1] = 0;
+		
+		peak_info.resize(0);
+		
+		// Get info about the histogram
+		int max = h->GetMaximum();
+		int threshold = max*0.2;
+		
+		// Loop over each bin
+		for ( int j = 0; j < h->GetNbinsX(); j++ ){
+			// Check to see if the current bin is over the threshold
+			if ( h->GetBinContent(j) > threshold ){
+				// Now check if bins either side <= current bin content 
+				// (shouldn't have peak on edge of spectrum, but may need to code that in later...)
+				if ( h->GetBinContent(j-1) <= h->GetBinContent(j) && h->GetBinContent(j+1) <= h->GetBinContent(j) ){
+					// Store those that pass this process
+					individual_peak[0] = h->GetBinContent(j);
+					individual_peak[1] = h->GetBinCenter(j);
+					peak_info.push_back( individual_peak );
+				}
+			}
+		}
+		
+		// Now deal with all the competitors -> set bad ones to zero
+		for ( unsigned int j = 1; j < peak_info.size(); j++ ){
+			for ( unsigned int k = 0; k < j; k++ ){
+				// First, test that both of the test peaks have positive heights
+				if ( peak_info[j][0] > 0 && peak_info[k][0] > 0 ){
+					// Second, test that the peaks are within range of each other
+					if ( TMath::Abs( peak_info[j][1] - peak_info[k][1] ) < 0.5*gAlphaPeakWidthEstimate ){
+						// Third, set the smaller one to have negative height (of its measured height for debugging)
+						if ( peak_info[j][0] > peak_info[k][0] ){
+							peak_info[k][0] = -peak_info[k][0];
+						}
+						else{
+							peak_info[j][0] = -peak_info[j][0];
+						}
+					}
+				}
+			}
+		}
+		
+		// Delete negative entries
+		for ( unsigned int j = 0; j < peak_info.size(); j++ ){
+			if ( peak_info[j][0] < 0 ){
+				peak_info.erase( peak_info.begin() + j );
+				j--;
+			}
+		}
+		
+		// Store the peak info into the alpha spectrum
+		for ( unsigned int j = 0; j < peak_info.size(); j++ ){
+			fAlphaSpectrumVector[i]->AddPeakLocation( peak_info[j][1] );
+		}
+	}
 	return;
 }
 // --------------------------------------------------------------------------------------------- //
-void WriteFitsToFile(){}
+void AlphaSpectrumFitter::SortPeaks(){
+	return;
+}
+// --------------------------------------------------------------------------------------------- //
+void AlphaSpectrumFitter::DiscardBadPeaks(){
+	return;
+}
+// --------------------------------------------------------------------------------------------- //
+void AlphaSpectrumFitter::GenerateFits(){
+	return;
+}
+// --------------------------------------------------------------------------------------------- //
+void AlphaSpectrumFitter::FitPeaks(){
+	return;
+}
+// --------------------------------------------------------------------------------------------- //
+void AlphaSpectrumFitter::WriteFitsToFile(){
+	fOutputFile->cd();
+	for ( unsigned int i = 0; i < fAlphaSpectrumVector.size(); i++ ){
+		fOutputFile->WriteTObject( fAlphaSpectrumVector[i] );
+	}
+	return;
+}

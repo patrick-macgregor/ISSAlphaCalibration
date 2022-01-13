@@ -15,18 +15,16 @@ const int NumberOfPArrayChannels = 128;
 //const int NSideChannelStart[NumberOfNPerASIC] = { 11, 28, 89, 106 };
 
 // Alpha source particulars
-const int NumberOfAlphaPeaks = 4;
-const int AlphaPeakWidthEstimate = 20; // Rough estimate of peak width in channels (so you don't select local maxima)
+const int gNumberOfAlphaPeaks = 4;
+const int gAlphaPeakWidthEstimate = 30; // Rough estimate of peak width in channels (so you don't select local maxima) - best if even!
 
 
 // HISTOGRAM FUNCTIONS
 TString SpectrumNameGenerator( unsigned char mod, unsigned char asic, unsigned char ch );
 TString SpectrumTitleGenerator( unsigned char mod, unsigned char asic, unsigned char ch );
 
-const int gAlphaHistNumBins = 325;
-const int gAlphaHistLB = 0;
-const int gAlphaHistUB = 6500;
-
-
+const int gAlphaHistNumBins = 250;
+const int gAlphaHistLB = 150;
+const int gAlphaHistUB = 650;
 
 #endif

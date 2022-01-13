@@ -61,6 +61,7 @@ int main( int argc, char *argv[] ){
 		al_spec_gen.PopulateSpectra();
 		al_spec_gen.LabelEmptySpectra();
 		al_spec_gen.WriteSpectraToFile();
+		al_spec_gen.CloseInput();
 		al_spec_gen.CloseOutput();
 	}
 	else{
@@ -74,23 +75,26 @@ int main( int argc, char *argv[] ){
 	std::cout << "\n +++ ISS Analysis:: Fitting alpha spectra +++" << std::endl;
 	
 	// Run test file check
-	fTest = new TFile( output_name_hists_fit, "READ" );
+	//fTest = new TFile( output_name_hists_fit, "READ" );
 	
 	// Check if file already exists, and only run if it doesn't
-	if ( fTest->IsOpen() == 0 ){
+	//if ( fTest->IsOpen() == 0 ){
 		std::cout << "Creating " << output_name_hists_fit << std::endl;
 		AlphaSpectrumFitter al_spec_fit;
 		al_spec_fit.SetInputFile( output_name_hists );
 		al_spec_fit.SetOutputFile( output_name_hists_fit );
 		al_spec_fit.GetSpectra();
-		al_spec_fit.FitSpectra();
-		/*al_spec_fit.WriteFitsToFile();*/
+		al_spec_fit.FindPeaks();
+		//al_spec_fit.FitSpectra();
+		al_spec_fit.WriteFitsToFile();
+		al_spec_fit.CloseInput();
+		al_spec_fit.CloseOutput();
 		
-	}
-	else{
-		std::cout << output_name_hists_fit << " already exists. Moving on..." << std::endl;
-		fTest->Close();
-	}
+	//}
+	//else{
+		//std::cout << output_name_hists_fit << " already exists. Moving on..." << std::endl;
+		//fTest->Close();
+	//}
 	
 	
 	

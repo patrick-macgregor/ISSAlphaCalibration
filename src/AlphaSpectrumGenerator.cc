@@ -61,7 +61,7 @@ void AlphaSpectrumGenerator::PopulateSpectra(){
 	TTreeReaderArray<unsigned char> tree_channel = {tree_reader, "asic_packets.ch"};
 	TTreeReaderArray<unsigned char> tree_asic = {tree_reader, "asic_packets.asic"};
 	TTreeReaderArray<unsigned char> tree_mod = {tree_reader, "asic_packets.mod"};
-	TTreeReaderArray<float> tree_energy = {tree_reader, "asic_packets.energy"};
+	TTreeReaderArray<unsigned short> tree_energy = {tree_reader, "asic_packets.adc_value"};
 	
 	// Loop over entries
 	for ( long i = 0; i < num_entries; i++ ){
@@ -79,7 +79,7 @@ void AlphaSpectrumGenerator::PopulateSpectra(){
 			CheckTTreeReaderArray<unsigned char>( tree_channel, 0, (unsigned char)NumberOfPArrayChannels ) &&
 			CheckTTreeReaderArray<unsigned char>( tree_asic, 0, (unsigned char)NumberOfArrayASICs ) &&
 			CheckTTreeReaderArray<unsigned char>( tree_mod, 0, (unsigned char)NumberOfArrayModules ) &&
-			CheckTTreeReaderArray<float>( tree_energy, 0, 1e8 ) &&
+			CheckTTreeReaderArray<unsigned short>( tree_energy, 0, 65535 ) &&
 			(
 				tree_channel.GetSize() == tree_asic.GetSize() &&
 				tree_channel.GetSize() == tree_mod.GetSize() && 
