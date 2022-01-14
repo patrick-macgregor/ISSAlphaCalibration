@@ -9,8 +9,11 @@
 #include "AlphaSpectrumGenerator.hh"
 #include "AlphaSpectrumManipulator.hh"
 #include "ChainMaker.hh"
+#include "ProgressBar.hh"
 
 int main( int argc, char *argv[] ){
+	// Initialise global variables etc.
+	InitialiseGlobalSettings();
 
 	// Define the variables that characterise each stage
 	TString output_name_chain = "alpha_chain.root";
@@ -19,9 +22,7 @@ int main( int argc, char *argv[] ){
 	
 	// Define tester file
 	TFile *fTest;
-
-
-
+	
 	// STAGE 1: MAKE THE TCHAIN
 	std::cout << "\n +++ ISS Analysis:: Making TChain +++" << std::endl;
 	
@@ -87,6 +88,7 @@ int main( int argc, char *argv[] ){
 		al_spec_fit.FindPeaks();
 		//al_spec_fit.FitSpectra();
 		al_spec_fit.WriteFitsToFile();
+		al_spec_fit.WriteFitsToImage();
 		al_spec_fit.CloseInput();
 		al_spec_fit.CloseOutput();
 		
@@ -124,7 +126,7 @@ int main( int argc, char *argv[] ){
 
 
 
-
+	std::cout << std::endl;
 	return 0;
 }
 

@@ -50,9 +50,7 @@ void AlphaSpectrumGenerator::PopulateSpectra(){
 	
 	// Determine progress bar
 	long num_entries = chain->GetEntries();
-	float progress_frac = 0.01; // Fraction of total
-	int progress_div = num_entries*progress_frac;
-	int progress_ctr = 0;
+	fProgressBar = new ProgressBar( chain->GetEntries() );
 	
 	// Set TTree Reader to look at this tree
 	TTreeReader tree_reader(chain);
@@ -64,15 +62,11 @@ void AlphaSpectrumGenerator::PopulateSpectra(){
 	TTreeReaderArray<unsigned short> tree_energy = {tree_reader, "asic_packets.adc_value"};
 	
 	// Loop over entries
+	std::cout << "Making histograms..." << std::endl;
 	for ( long i = 0; i < num_entries; i++ ){
 		// Set the entry
 		tree_reader.SetEntry(i);
-		
-		// Spit out progres
-		if ( i % progress_div == 0 ){
-			std::cout << "Histogram-making: " << std::setw(3) << std::setprecision(0) << std::fixed << progress_ctr*progress_frac*100 << " %\r" << std::flush;
-			progress_ctr++;
-		}
+		fProgressBar->UpdateProgress(i);
 
 		// Check that all arrays have the same size and are filled
 		bool bAllDataAreGood = ( 

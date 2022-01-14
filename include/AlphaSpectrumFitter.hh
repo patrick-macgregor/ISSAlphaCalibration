@@ -5,6 +5,7 @@
 #include "AlphaSpectrum.hh"
 #include "AlphaSpectrumManipulator.hh"
 
+#include <TCanvas.h>
 #include <TFile.h>
 #include <TH1F.h>
 #include <TList.h>
@@ -26,6 +27,7 @@ class AlphaSpectrumFitter : public AlphaSpectrumManipulator{
 		void GenerateFits();
 		void FitPeaks();
 		void WriteFitsToFile();
+		void WriteFitsToImage();
 
 	ClassDef( AlphaSpectrumFitter, 1 );
 };

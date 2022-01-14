@@ -119,3 +119,29 @@ void AlphaSpectrumFitter::WriteFitsToFile(){
 	}
 	return;
 }
+// --------------------------------------------------------------------------------------------- //
+void AlphaSpectrumFitter::WriteFitsToImage(){
+	TCanvas *c = new TCanvas( "CANVAS", "CANVAS", 800, 600 );
+	c->cd();
+	int num = 0;
+	fProgressBar = new ProgressBar( fAlphaSpectrumVector.size() );
+	
+	std::cout << "Printing images..." << std::endl;
+	for ( unsigned int i = 0; i < fAlphaSpectrumVector.size(); i++ ){
+		fAlphaSpectrumVector[i]->Draw();
+		num = fAlphaSpectrumVector[i]->GetNumberOfPeaks();
+		TString file_name = "images/" + ( num > 0 && num < 10 ? "0" + (TString)Form( "%i", num ) + "/" : "" )+ (TString)(fAlphaSpectrumVector[i]->GetName()) + "__" + num + ".png";
+		c->Print( file_name );
+		
+		// Check Progress
+		fProgressBar->UpdateProgress(i);
+	}
+
+	return;
+}
+
+
+
+
+
+

@@ -44,7 +44,8 @@ OBJECTS =  		$(SRC_DIR)/AlphaCalibrationGlobals.o \
 				$(SRC_DIR)/AlphaSpectrumFitter.o \
 				$(SRC_DIR)/AlphaSpectrumGenerator.o \
 				$(SRC_DIR)/AlphaSpectrumManipulator.o \
-				$(SRC_DIR)/ChainMaker.o
+				$(SRC_DIR)/ChainMaker.o \
+				$(SRC_DIR)/ProgressBar.o
  
 # The header files.
 DEPENDENCIES =  $(INC_DIR)/AlphaCalibrationGlobals.hh \
@@ -52,7 +53,8 @@ DEPENDENCIES =  $(INC_DIR)/AlphaCalibrationGlobals.hh \
 				$(INC_DIR)/AlphaSpectrumFitter.hh \
 				$(INC_DIR)/AlphaSpectrumGenerator.hh \
 				$(INC_DIR)/AlphaSpectrumManipulator.hh \
-				$(INC_DIR)/ChainMaker.hh
+				$(INC_DIR)/ChainMaker.hh \
+				$(INC_DIR)/ProgressBar.hh
  
 .PHONY : all
 all: $(BIN_DIR)/iss_alpha_calibration $(LIB_DIR)/libiss_alpha_calibration.so
@@ -83,7 +85,7 @@ iss_alpha_calibrationDict.cc: $(DEPENDENCIES) $(INC_DIR)/RootLinkDef.h
 
 
 clean:
-	rm -vf $(BIN_DIR)/iss_alpha_calibration $(SRC_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*.gch *.o $(BIN_DIR)/*.pcm *.pcm $(BIN_DIR)/*Dict* *Dict* $(LIB_DIR)/* alpha*.root
+	rm -vf $(BIN_DIR)/iss_alpha_calibration $(SRC_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*.gch *.o $(BIN_DIR)/*.pcm *.pcm $(BIN_DIR)/*Dict* *Dict* $(LIB_DIR)/* alpha*.root images/0[0-9]/*.png
 	
 root:
 	rm alpha*.root

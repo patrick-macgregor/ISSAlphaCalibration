@@ -35,6 +35,7 @@
 lib/
 bin/
 hide/
+images/
 *.root
 *.pcm
 iss_alpha_calibrationDict.cc

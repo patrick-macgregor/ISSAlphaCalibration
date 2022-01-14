@@ -1,7 +1,12 @@
 #ifndef _ALPHA_CALIBRATION_GLOBALS_HH_
 #define _ALPHA_CALIBRATION_GLOBALS_HH_
 
+#include "ProgressBar.hh"
+
+#include <TError.h>
+#include <TROOT.h>
 #include <TString.h>
+
 #include <vector>
 
 // Put global variables in here to use
@@ -17,14 +22,18 @@ const int NumberOfPArrayChannels = 128;
 // Alpha source particulars
 const int gNumberOfAlphaPeaks = 4;
 const int gAlphaPeakWidthEstimate = 30; // Rough estimate of peak width in channels (so you don't select local maxima) - best if even!
+const int gAlphaPeakChannelCheckLimit = 4;	// How far to look either side of a given peak to check it's legit (in channels)
 
-
-// HISTOGRAM FUNCTIONS
-TString SpectrumNameGenerator( unsigned char mod, unsigned char asic, unsigned char ch );
-TString SpectrumTitleGenerator( unsigned char mod, unsigned char asic, unsigned char ch );
-
+// HISTOGRAM THINGS
 const int gAlphaHistNumBins = 250;
 const int gAlphaHistLB = 150;
 const int gAlphaHistUB = 650;
+
+// FUNCTIONS
+TString SpectrumNameGenerator( unsigned char mod, unsigned char asic, unsigned char ch );
+TString SpectrumTitleGenerator( unsigned char mod, unsigned char asic, unsigned char ch );
+void InitialiseGlobalSettings();
+
+
 
 #endif
