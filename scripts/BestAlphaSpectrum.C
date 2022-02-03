@@ -16,10 +16,12 @@ int BestAlphaSpectrum(){
 	
 	for ( int i = 0; i < l->GetSize(); i++ ){
 		a = (AlphaSpectrum*)f->Get( l->At(i)->GetName() );
-		h = a->GetHist();
-		if ( h->Integral() > max_counts ){
-			std::cout << l->At(i)->GetName() << " takes max from " << max_counts << " to " << h->Integral() << std::endl;
-			max_counts = h->Integral();
+		if ( a->GetAsic() != 1 && a->GetAsic() != 4 ){
+			h = a->GetHist();
+			if ( h->Integral( h->FindBin(350), h->GetNbinsX() ) > max_counts ){
+				std::cout << l->At(i)->GetName() << " takes max from " << max_counts << " to " << h->Integral() << std::endl;
+				max_counts = h->Integral();
+			}
 		}
 	}
 	

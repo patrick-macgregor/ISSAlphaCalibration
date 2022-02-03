@@ -6,6 +6,7 @@
 #pragma link C++ class AlphaSpectrumFitter+;
 #pragma link C++ class AlphaSpectrumGenerator+;
 #pragma link C++ class AlphaSpectrumManipulator+;
+#pragma link C++ class CalibrationCreator+;
 #pragma link C++ class ChainMaker+;
 #pragma link C++ class ProgressBar+;
 #endif

@@ -40,6 +40,8 @@ class AlphaSpectrum : public TNamed{
 		inline TH1F* GetHist(){ return fHist; }
 		inline unsigned int GetNumberOfPeaks(){ return fPeakLocations.size(); };
 		
+		inline int GetPeakChannel( int i ){ return fPeakLocations[i]; }
+		
 		void CreateHistogram();
 		void CheckIsEmpty();
 		inline void FillHistogram( double a ){ fHist->Fill(a); }

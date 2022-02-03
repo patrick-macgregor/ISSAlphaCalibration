@@ -4,8 +4,11 @@
 #include "AlphaCalibrationGlobals.hh"
 #include "AlphaSpectrum.hh"
 #include "AlphaSpectrumManipulator.hh"
+#include "CrystalBall.hh"
 
 #include <TCanvas.h>
+#include <TColor.h>
+#include <TF1.h>
 #include <TFile.h>
 #include <TH1F.h>
 #include <TList.h>
@@ -16,15 +19,15 @@ class AlphaSpectrumFitter : public AlphaSpectrumManipulator{
 	private:
 		std::vector <AlphaSpectrum*> fAlphaSpectrumVector;
 		
+		void FitGaussian(AlphaSpectrum* a);
+		void FitCrystalBall( AlphaSpectrum* a );
+		
 	public:
 		AlphaSpectrumFitter();
 		~AlphaSpectrumFitter();
 		
 		void GetSpectra();
 		void FindPeaks();
-		void SortPeaks();
-		void DiscardBadPeaks();
-		void GenerateFits();
 		void FitPeaks();
 		void WriteFitsToFile();
 		void WriteFitsToImage();

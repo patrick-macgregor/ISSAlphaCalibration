@@ -22,10 +22,10 @@ class AlphaSpectrumManipulator{
 		virtual ~AlphaSpectrumManipulator();
 		
 	public:
-		void SetInputFile( TString file );
-		void SetOutputFile( TString file );
-		void CloseInput();
-		void CloseOutput();
+		virtual void SetInputFile( TString file );
+		virtual void SetOutputFile( TString file );
+		virtual void CloseInput();
+		virtual void CloseOutput();
 
 };
 #endif

@@ -3,11 +3,13 @@
 #include <TChain.h>
 #include <TFile.h>
 #include <TString.h>
+#include <TSystem.h>
 
 #include "AlphaCalibrationGlobals.hh"
 #include "AlphaSpectrumFitter.hh"
 #include "AlphaSpectrumGenerator.hh"
 #include "AlphaSpectrumManipulator.hh"
+#include "CalibrationCreator.hh"
 #include "ChainMaker.hh"
 #include "ProgressBar.hh"
 
@@ -19,18 +21,13 @@ int main( int argc, char *argv[] ){
 	TString output_name_chain = "alpha_chain.root";
 	TString output_name_hists = "alpha_hists.root";
 	TString output_name_hists_fit = "alpha_hists_fit.root";
-	
-	// Define tester file
-	TFile *fTest;
+	TString output_name_calibration = "alpha_calibration.dat";
 	
 	// STAGE 1: MAKE THE TCHAIN
 	std::cout << "\n +++ ISS Analysis:: Making TChain +++" << std::endl;
 	
-	// Run test file check
-	fTest = new TFile( output_name_chain, "READ" );
-	
 	// Check if file already exists, and only run if it doesn't
-	if ( fTest->IsOpen() == 0 ){
+	if ( gSystem->AccessPathName( output_name_chain )  ){
 		std::cout << "Creating " << output_name_chain << std::endl;
 		ChainMaker chainmaker( argc, argv );
 		chainmaker.SetOutputFile( output_name_chain );
@@ -40,7 +37,6 @@ int main( int argc, char *argv[] ){
 	}
 	else{
 		std::cout << output_name_chain << " already exists. Moving on..." << std::endl;
-		fTest->Close();
 	}
 
 
@@ -48,11 +44,8 @@ int main( int argc, char *argv[] ){
 	// STAGE 2: GENERATE THE ALPHA SPECTRA
 	std::cout << "\n +++ ISS Analysis:: Generating alpha spectra +++" << std::endl;
 	
-	// Run test file check
-	fTest = new TFile( output_name_hists, "READ" );
-	
 	// Check if file already exists, and only run if it doesn't
-	if ( fTest->IsOpen() == 0 ){
+	if ( gSystem->AccessPathName( output_name_hists ) ){
 		std::cout << "Creating " << output_name_hists << std::endl;
 		
 		// Generate the spectra
@@ -67,60 +60,43 @@ int main( int argc, char *argv[] ){
 	}
 	else{
 		std::cout << output_name_hists << " already exists. Moving on..." << std::endl;
-		fTest->Close();
 	}
 	
 	
 	
 	// STAGE 3: FIT THE ALPHA SPECTRA
 	std::cout << "\n +++ ISS Analysis:: Fitting alpha spectra +++" << std::endl;
-	
-	// Run test file check
-	//fTest = new TFile( output_name_hists_fit, "READ" );
-	
+
 	// Check if file already exists, and only run if it doesn't
-	//if ( fTest->IsOpen() == 0 ){
+	if ( gSystem->AccessPathName( output_name_hists_fit ) ){
 		std::cout << "Creating " << output_name_hists_fit << std::endl;
 		AlphaSpectrumFitter al_spec_fit;
 		al_spec_fit.SetInputFile( output_name_hists );
 		al_spec_fit.SetOutputFile( output_name_hists_fit );
 		al_spec_fit.GetSpectra();
 		al_spec_fit.FindPeaks();
-		//al_spec_fit.FitSpectra();
+		//al_spec_fit.FitPeaks(); --> only use if simple peak-finding is not working!
 		al_spec_fit.WriteFitsToFile();
-		al_spec_fit.WriteFitsToImage();
+		//al_spec_fit.WriteFitsToImage(); --> prints all of the spectra to images
 		al_spec_fit.CloseInput();
 		al_spec_fit.CloseOutput();
 		
-	//}
-	//else{
-		//std::cout << output_name_hists_fit << " already exists. Moving on..." << std::endl;
-		//fTest->Close();
-	//}
+	}
+	else{
+		std::cout << output_name_hists_fit << " already exists. Moving on..." << std::endl;
+	}
 	
 	
-	
-/*		
-
-	TODO
-	// Run checks to see if spectra already fitted
-	AlphaSpectrumFitter al_spec_fit;
-	al_spec_fit.SetInputFile( input_file );
-	al_spec_fit.SetOutputFile( output_file );
-	al_spec_fit.FitSpectra();
-	al_spec_fit.CloseOutput();
-	
-	// Store calibration
-	AlphaCalibration alpha_cal;
-	al_spec_fit.GetFitData( &alpha_cal );
 	
 	
 	std::cout << "\n +++ ISS Analysis:: Writing calibration file +++" << std::endl;
-	CalibrationWriter cal_write( &alpha_cal );
-	cal_write.SetOutputFile(output_file);
-	cal_write.WriteCalibration();
-	cal_write.CloseOutput();
-*/
+	CalibrationCreator cal_creator;
+	cal_creator.SetInputFile(output_name_hists_fit);
+	cal_creator.SetOutputFile(output_name_calibration);
+	cal_creator.GetSpectra();
+	cal_creator.WriteCalibration();
+	cal_creator.CloseOutput();
+
 
 
 
