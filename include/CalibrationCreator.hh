@@ -8,13 +8,14 @@
 #include <TMath.h>
 #include <TString.h>
 
+#include <fstream>
 #include <iostream>
 #include <vector>
 
 class CalibrationCreator : public AlphaSpectrumManipulator{
 	private:
 		std::vector <AlphaSpectrum*> fAlphaSpectrumVector;
-		std::ofstream fOutputFileDat;	//TODO
+		std::ofstream fOutputFileDat;
 		
 		void GetOffsetAndGainFromPeaks( AlphaSpectrum* a, double &quadgain, double &gain, double &offset );
 		TString GetCalibrationLine( AlphaSpectrum* a, double &quadgain, double &gain, double &offset );
@@ -25,7 +26,8 @@ class CalibrationCreator : public AlphaSpectrumManipulator{
 		~CalibrationCreator();
 		void GetSpectra();
 		void WriteCalibration();
-		void SetOutputFile( TString file );
+		void SetOutputFile( TString file ) override;
+		void CloseOutput() override;
 		
 	ClassDef( CalibrationCreator, 1 );
 };

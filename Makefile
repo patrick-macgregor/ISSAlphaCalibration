@@ -88,8 +88,17 @@ iss_alpha_calibrationDict.cc: $(DEPENDENCIES) $(INC_DIR)/RootLinkDef.h
 	$(ROOTDICT) -f $@ -c $(INCLUDES) $(DEPENDENCIES) $(INC_DIR)/RootLinkDef.h
 
 
-clean:
-	rm -vf $(BIN_DIR)/iss_alpha_calibration $(SRC_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*.gch *.o $(BIN_DIR)/*.pcm *.pcm $(BIN_DIR)/*Dict* *Dict* $(LIB_DIR)/* alpha*.root images/0[0-9]/*.png images/*.png
+.PHONY : clean cleancode cleanfiles
+
+clean: cleancode cleanfiles
+
+cleancode:
+	rm -vf $(BIN_DIR)/iss_alpha_calibration $(SRC_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*.gch *.o $(BIN_DIR)/*.pcm *.pcm $(BIN_DIR)/*Dict* *Dict* $(LIB_DIR)/*
 	
-root:
+cleanfiles:
 	rm -vf alpha*.root images/0[0-9]/*.png images/*.png
+		
+	
+	
+	
+	

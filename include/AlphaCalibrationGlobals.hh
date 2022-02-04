@@ -13,15 +13,11 @@
 // ISS Array Info
 const int NumberOfArrayModules = 3;
 const int NumberOfArrayASICs = 6;
-//const bool ASICIsPSide[NumberOfArrayASICs] = { 1, 0, 1, 1, 0, 1 };
 const int NumberOfPArrayChannels = 128;
-//const int NumberOfNArrayChannels = 11;
-//const int NumberOfNPerASIC = 4;
-//const int NSideChannelStart[NumberOfNPerASIC] = { 11, 28, 89, 106 };
 
 // Alpha source particulars
 const int gNumberOfAlphaPeaks = 4;
-const int gAlphaPeakWidthEstimate = 30; // Rough estimate of peak width in channels (so you don't select local maxima) - best if even!
+const int gAlphaPeakWidthEstimate = 30; 	// Rough estimate of peak width in channels (so you don't select local maxima) - best if even!
 const int gAlphaPeakChannelCheckLimit = 4;	// How far to look either side of a given peak to check it's legit (in channels)
 
 // HISTOGRAM THINGS
@@ -41,7 +37,7 @@ void InitialiseGlobalSettings();
 
 // CALIBRATION
 // Nuclides used here are 148Gd, 239Pu, 241Am, 244Cm. Energies listed in order of energy (keV).
-// Energies taken from NNDC in 2022
+// Energies taken from NNDC in 2022 --> just the strongest peaks at the moment
 const double gAlphaParticleEnergy[gNumberOfAlphaPeaks] = {
 	3182.690,	// 100    % 148Gd
 	5156.59,	//  70.77 % 239Pu

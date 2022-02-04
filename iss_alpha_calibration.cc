@@ -87,21 +87,25 @@ int main( int argc, char *argv[] ){
 	}
 	
 	
-	
-	
+
+	// STAGE 4: WRITE THE CALIBRATION FILE
 	std::cout << "\n +++ ISS Analysis:: Writing calibration file +++" << std::endl;
+	if ( gSystem->AccessPathName( output_name_hists_fit ) ){
+		std::cout << "Creating " << output_name_calibration << std::endl;
+	}
+	else{
+		std::cout << "Overwriting " << output_name_calibration << std::endl;
+	}
 	CalibrationCreator cal_creator;
 	cal_creator.SetInputFile(output_name_hists_fit);
 	cal_creator.SetOutputFile(output_name_calibration);
 	cal_creator.GetSpectra();
 	cal_creator.WriteCalibration();
+	cal_creator.CloseInput();
 	cal_creator.CloseOutput();
 
 
-
-
-
-
+	// FINISH
 	std::cout << std::endl;
 	return 0;
 }

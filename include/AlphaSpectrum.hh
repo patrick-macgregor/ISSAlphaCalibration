@@ -19,7 +19,7 @@ class AlphaSpectrum : public TNamed{
 		bool fIsEmpty;				// Boolean that alerts the generator if a given spectrum is empty or not
 		
 		// FITTING STUFF
-		std::vector<int> fPeakLocations;
+		std::vector<int> fPeakLocations;	// Stores the channels where peaks are found
 		
 		// Initialisation
 		void Initialise();
@@ -45,10 +45,9 @@ class AlphaSpectrum : public TNamed{
 		void CreateHistogram();
 		void CheckIsEmpty();
 		inline void FillHistogram( double a ){ fHist->Fill(a); }
-		//inline double GetEntries(){ return fHist->GetEntries(); }
 		inline bool IsEmpty(){ return fIsEmpty; }
 		
-		void Draw();
+		void Draw();	// Enhanced draw function that includes drawing the fits/highlighting the peaks
 		
 	ClassDef( AlphaSpectrum, 1 );
 };

@@ -129,7 +129,7 @@ void AlphaSpectrumFitter::FitPeaks(){
 	// N.B. these methods were used on a particularly strong spectrum to see if the simple peak
 	// finding needed something more added to it. I have left it in just in case anybody else
 	// needs to do more complicated fits. Feel free to tweak!
-	
+	// TODO if this is needed, it will need a LOT more work!
 	
 	// Different fitting methods to try if peak finding not as successful
 	for ( unsigned int i = 0; i < fAlphaSpectrumVector.size(); i++ ){

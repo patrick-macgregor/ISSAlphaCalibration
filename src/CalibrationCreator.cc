@@ -55,7 +55,7 @@ void CalibrationCreator::GetOffsetAndGainFromPeaks( AlphaSpectrum *a, double &qu
 		if ( quadratic ){
 			X3 += TMath::Power( a->GetPeakChannel(i), 3 );
 			X4 += TMath::Power( a->GetPeakChannel(i), 4 );
-			Y1 += gAlphaParticleEnergy[i]*TMath::Power( a->GetPeakChannel(i), 2 );
+			Y2 += gAlphaParticleEnergy[i]*TMath::Power( a->GetPeakChannel(i), 2 );
 		}
 		
 	}
@@ -94,30 +94,59 @@ void CalibrationCreator::GetOffsetAndGainFromPeaks( AlphaSpectrum *a, double &qu
 	
 	return;
 }
-TString GetCalibrationLine( AlphaSpectrum* a, double &quadgain, double &gain, double &offset ){
-	// TODO
-	return "";
+// --------------------------------------------------------------------------------------------- //
+TString CalibrationCreator::GetCalibrationLine( AlphaSpectrum* a, double &quadgain, double &gain, double &offset ){
+	// Check the quadratic term
+	bool b_quadgain = 0;
+	if ( quadgain != 0 ){ b_quadgain = 1; }
+	
+	 // Now write the correct lines (N.B. assuming quadgain = 0 is default, so won't bother printing if this is true)
+	TString asic_number = Form( "asic_%i_%i_%i.", a->GetModule(), a->GetAsic(), a->GetChannel() );
+	
+	const int num_cal_lines = 3;
+	const int cal_line_length_before_number = 24;
+	TString calibration_line[num_cal_lines];
+	
+	calibration_line[0] = asic_number + "Offset:";
+	calibration_line[1] = asic_number + "Gain:";
+	calibration_line[2] = ( b_quadgain ? asic_number + "GainQuadr:" : "" );
+	
+	// Append spaces
+	for ( int i = 0; i < num_cal_lines; i++ ){
+		calibration_line[i].Append( ' ', cal_line_length_before_number - calibration_line[i].Length() );
+	}
+	
+	// Append number
+	calibration_line[0].Append( ( offset != 0 ? Form("%10.4f", offset ) : "????????" ) );
+	calibration_line[1].Append( ( gain != 0 ? Form("%10.4f", gain ) : "????????" ) );
+	if ( b_quadgain ){ calibration_line[2].Append( Form("%8.8f", quadgain ) ); }
+	
+	// Create final return string
+	TString final_string = ( offset == 0 ? "# " : "" ) + calibration_line[0] + "\n" + 
+		( gain == 0 ? "# " : "" ) + calibration_line[1] + "\n" + 
+		( b_quadgain ? calibration_line[2] + "\n" : "" );
+		
+	return final_string;
+	
 }
 
 // --------------------------------------------------------------------------------------------- //
 void CalibrationCreator::WriteCalibration(){
-	// Loop over fit spectra
+	// Define quantities to store the offset parameters
 	double quadgain = 0.0;
 	double gain = 0.0;
 	double offset = 0.0;
 	
-	// Clear output file
-	//TODO
-	
+	// Loop over fit spectra
 	for  ( unsigned int i = 0; i < fAlphaSpectrumVector.size(); i++ ){
 		// Get offset and gain
 		GetOffsetAndGainFromPeaks( fAlphaSpectrumVector[i], quadgain, gain, offset );
 		
 		// Typeset the results and write to file
-		//TString line = GetCalibrationLine( fAlphaSpectrumVector[i], quadgain, gain, offset );
+		TString line = GetCalibrationLine( fAlphaSpectrumVector[i], quadgain, gain, offset );
 		
 		// Write to file
-		//fOutputFile << line;
+		fOutputFileDat << line;
 
 	}
 	
@@ -125,11 +154,17 @@ void CalibrationCreator::WriteCalibration(){
 }
 // --------------------------------------------------------------------------------------------- //
 void CalibrationCreator::SetOutputFile( TString file ){
-	// TODO
-	
+	fOutputFileDat.open( file.Data(), std::fstream::trunc );
+	if ( !fOutputFileDat.is_open() ){
+		std::cerr << "Calibration data file " << file << " failed to open." << std::endl;
+	}
 	return;
 }
-
+// --------------------------------------------------------------------------------------------- //
+void CalibrationCreator::CloseOutput(){
+	fOutputFileDat.close();
+	return;
+}
 
 
 
