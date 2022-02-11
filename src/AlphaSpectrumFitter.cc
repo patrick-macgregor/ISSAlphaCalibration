@@ -125,6 +125,7 @@ void AlphaSpectrumFitter::FindPeaks(){
 	return;
 }
 // --------------------------------------------------------------------------------------------- //
+// NOT CALLED BY DEFAULT!
 void AlphaSpectrumFitter::FitPeaks(){
 	// N.B. these methods were used on a particularly strong spectrum to see if the simple peak
 	// finding needed something more added to it. I have left it in just in case anybody else
@@ -352,6 +353,16 @@ void AlphaSpectrumFitter::WriteFitsToImage(){
 	// Used for setting the file name based on the number of peaks in the spectrum
 	int num = 0;
 	
+	// Check image directory exist ---> WILL NOT WORK ON WINDOWS
+	if ( gImageDirectory != "" ){
+		gSystem->Exec( Form("mkdir -p %s", gImageDirectory.Data() ) );
+	}
+	
+	// Check image subdirectories exist ---> WILL NOT WORK ON WINDOWS
+	for ( int i = 0; i < 10; i++ ){
+		gSystem->Exec( Form("mkdir -p %s/%02i", ( gImageDirectory != "" ? gImageDirectory.Data() : "." ), i ) );
+	}
+	
 	std::cout << "Printing images..." << std::endl;
 	// Loop over spectra
 	for ( unsigned int i = 0; i < fAlphaSpectrumVector.size(); i++ ){
@@ -360,7 +371,7 @@ void AlphaSpectrumFitter::WriteFitsToImage(){
 		
 		// Get the number of peaks found and set the file name
 		num = fAlphaSpectrumVector[i]->GetNumberOfPeaks();
-		TString file_name = "images/" + ( num > 0 && num < 10 ? "0" + (TString)Form( "%i", num ) + "/" : "" )+ (TString)(fAlphaSpectrumVector[i]->GetName()) + "__" + num + ".png";
+		TString file_name = ( gImageDirectory != "" ? gImageDirectory : "." ) + "/" + ( num > 0 && num < 10 ? "0" + (TString)Form( "%i", num ) + "/" : "" )+ (TString)(fAlphaSpectrumVector[i]->GetName()) + "__" + num + "." + gImageFileType;
 		
 		// Print the spectrum
 		c->Print( file_name );

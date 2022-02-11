@@ -75,9 +75,9 @@ int main( int argc, char *argv[] ){
 		al_spec_fit.SetOutputFile( output_name_hists_fit );
 		al_spec_fit.GetSpectra();
 		al_spec_fit.FindPeaks();
-		//al_spec_fit.FitPeaks(); --> only use if simple peak-finding is not working!
+		//al_spec_fit.FitPeaks(); --> only use if simple peak-finding is not working! Also will need to tweak fitting functions
 		al_spec_fit.WriteFitsToFile();
-		//al_spec_fit.WriteFitsToImage(); --> prints all of the spectra to images
+		//al_spec_fit.WriteFitsToImage(); // --> prints all of the spectra to images in folders based on number of peaks (optional)
 		al_spec_fit.CloseInput();
 		al_spec_fit.CloseOutput();
 		

@@ -19,9 +19,7 @@ ChainMaker::ChainMaker( int argc, char* argv[] ){
 	}
 }
 // --------------------------------------------------------------------------------------------- //
-ChainMaker::~ChainMaker(){
-	// Nowt
-};
+ChainMaker::~ChainMaker(){};
 // --------------------------------------------------------------------------------------------- //
 void ChainMaker::AddFile( TString file ){
 	fInputFile = new TFile( file.Data(), "READ" );
@@ -67,44 +65,3 @@ void ChainMaker::WriteChain(){
 	}
 	return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

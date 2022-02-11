@@ -3,6 +3,7 @@
 AlphaSpectrumManipulator::AlphaSpectrumManipulator(){
 	fInputFile = NULL;
 	fOutputFile = NULL;
+	fProgressBar = NULL;
 }
 // --------------------------------------------------------------------------------------------- //
 AlphaSpectrumManipulator::~AlphaSpectrumManipulator(){}

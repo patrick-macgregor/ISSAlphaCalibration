@@ -12,6 +12,7 @@
 #include <TFile.h>
 #include <TH1F.h>
 #include <TList.h>
+#include <TSystem.h>
 
 #include <iostream>
 
@@ -19,8 +20,8 @@ class AlphaSpectrumFitter : public AlphaSpectrumManipulator{
 	private:
 		std::vector <AlphaSpectrum*> fAlphaSpectrumVector;
 		
-		void FitGaussian(AlphaSpectrum* a);
-		void FitCrystalBall( AlphaSpectrum* a );
+		void FitGaussian(AlphaSpectrum* a);			// Called during fitting process
+		void FitCrystalBall( AlphaSpectrum* a );	// Called during fitting process
 		
 	public:
 		AlphaSpectrumFitter();

@@ -22,10 +22,6 @@ AlphaSpectrum::~AlphaSpectrum(){}
 void AlphaSpectrum::Initialise(){
 	fIsEmpty = 0;
 	fHist = NULL;
-	/*fPeakLocations.resize( gNumberOfAlphaPeaks );
-	for ( int i = 0; i < gNumberOfAlphaPeaks; i++ ){
-		fPeakLocations[i] = -1;
-	}*/
 	return;
 }
 // --------------------------------------------------------------------------------------------- //
@@ -54,7 +50,7 @@ void AlphaSpectrum::CreateHistogram(){
 			gAlphaHistUB
 		);
 		
-		// TODO histogram formatting here
+		// TODO histogram formatting here if you desire it!
 	}
 	return;
 }
@@ -70,7 +66,7 @@ void AlphaSpectrum::CheckIsEmpty(){
 }
 // --------------------------------------------------------------------------------------------- //
 void AlphaSpectrum::Draw(){
-	// Draw the histograms
+	// Draw the histogram
 	fHist->Draw();
 	
 	// Add peak locations as triangles marking their locations
@@ -79,18 +75,23 @@ void AlphaSpectrum::Draw(){
 		double triangle_height = fHist->GetMaximum()*0.04;
 		double triangle_width = ( ( gAlphaHistUB - gAlphaHistLB )/gAlphaHistNumBins )*2;
 		
-		
+		// Vertices of triangles
 		double x[3] = {0,0,0};
 		double y[3] = {0,0,0};
 		
+		// Initalise array for the number of triangles to draw
 		TPolyLine *p[fPeakLocations.size()];
 
+		// Define triangle coordinates and draw for each peak
 		for ( unsigned int i = 0; i < fPeakLocations.size(); i++ ){
+			// Calculate coordinates
 			int y_base = fHist->GetBinContent( fHist->FindBin( fPeakLocations[i] ) ) + 0.25*triangle_height;
 			for ( int j = 0; j < 3; j++ ){
 				x[j] = fPeakLocations[i] + ( j-1 )*triangle_width;
 				y[j] = y_base + TMath::Abs( (j-1) )*triangle_height;
 			}
+			
+			// Initalise and draw
 			p[i] = new TPolyLine(3,x,y);
 			p[i]->SetFillColor( kRed );
 			p[i]->Draw("F SAME");
@@ -98,8 +99,3 @@ void AlphaSpectrum::Draw(){
 	}
 	return;
 }
-
-
-
-
-

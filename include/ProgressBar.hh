@@ -13,8 +13,8 @@ class ProgressBar{
 		float fProgressPercentage;		// The step in percentage
 		int fProgressDivisor;			// The divisor to make the numbers work
 		
-		void PrintProgress();
-		TString GetProgressBar();
+		void PrintProgress();			// Prints the progress bar -- called in update function so not public
+		TString GetProgressBar();		// Get the progress as a TString
 		
 	public:
 		ProgressBar( int max_entries );

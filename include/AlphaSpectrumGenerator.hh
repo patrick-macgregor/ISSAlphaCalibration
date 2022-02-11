@@ -15,21 +15,22 @@
 
 #include <iostream>
 
+// Generates a number of alpha spectra which are stored as their own special class in a TFile
 
 class AlphaSpectrumGenerator : public AlphaSpectrumManipulator{
 	private:
 		std::vector < std::vector < std::vector < AlphaSpectrum* > > > fAlphaSpectrumVector;
 		
 		void Initialise();
-		template <typename T>
-		bool CheckTTreeReaderArray( TTreeReaderArray<T>& arr, T lb, T ub );
+		template <typename T>	// Template needed as different types of tree might be needed here
+		bool CheckTTreeReaderArray( TTreeReaderArray<T>& arr, T lb, T ub );	// Bounds used to check limits placed on quantities it reads in
 
 	public:
 		AlphaSpectrumGenerator();
 		virtual ~AlphaSpectrumGenerator();
 		
 		void PopulateSpectra();
-		void LabelEmptySpectra();
+		void LabelEmptySpectra();	// Works through populated spectra and labels ones with no data
 		void WriteSpectraToFile();
 		
 	ClassDef( AlphaSpectrumGenerator, 1 );

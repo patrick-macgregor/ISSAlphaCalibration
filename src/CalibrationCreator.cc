@@ -25,7 +25,7 @@ void CalibrationCreator::GetSpectra(){
 	return;
 }
 // --------------------------------------------------------------------------------------------- //
-void CalibrationCreator::GetOffsetAndGainFromPeaks( AlphaSpectrum *a, double &quadgain, double &gain, double &offset ){
+void CalibrationCreator::GetOffsetAndGainFromSpectrum( AlphaSpectrum *a, double &quadgain, double &gain, double &offset ){
 	// Do a LINEAR or QUADRATIC fit to generate the calibration
 	bool quadratic = gQuadraticAlphaCalibration;
 	
@@ -95,7 +95,7 @@ void CalibrationCreator::GetOffsetAndGainFromPeaks( AlphaSpectrum *a, double &qu
 	return;
 }
 // --------------------------------------------------------------------------------------------- //
-TString CalibrationCreator::GetCalibrationLine( AlphaSpectrum* a, double &quadgain, double &gain, double &offset ){
+TString CalibrationCreator::GetCalibrationParameters( AlphaSpectrum* a, double &quadgain, double &gain, double &offset ){
 	// Check the quadratic term
 	bool b_quadgain = 0;
 	if ( quadgain != 0 ){ b_quadgain = 1; }
@@ -140,10 +140,10 @@ void CalibrationCreator::WriteCalibration(){
 	// Loop over fit spectra
 	for  ( unsigned int i = 0; i < fAlphaSpectrumVector.size(); i++ ){
 		// Get offset and gain
-		GetOffsetAndGainFromPeaks( fAlphaSpectrumVector[i], quadgain, gain, offset );
+		GetOffsetAndGainFromSpectrum( fAlphaSpectrumVector[i], quadgain, gain, offset );
 		
 		// Typeset the results and write to file
-		TString line = GetCalibrationLine( fAlphaSpectrumVector[i], quadgain, gain, offset );
+		TString line = GetCalibrationParameters( fAlphaSpectrumVector[i], quadgain, gain, offset );
 		
 		// Write to file
 		fOutputFileDat << line;
@@ -165,22 +165,3 @@ void CalibrationCreator::CloseOutput(){
 	fOutputFileDat.close();
 	return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

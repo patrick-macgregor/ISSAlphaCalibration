@@ -2,6 +2,8 @@
 #define _ALPHA_SPECTRUM_MANIPULATOR_HH_
 
 // Abstract base class for manipulating alpha spectra
+// Essentially contains the file input and output functions, which is reused by multiple classes
+// Also contains a progress bar should it be needed
 
 #include "ProgressBar.hh"
 
@@ -15,8 +17,8 @@ class AlphaSpectrumManipulator{
 		TFile *fInputFile;
 		TFile *fOutputFile;
 		ProgressBar *fProgressBar;
-		void SetFile( TString file, TFile*& f, TString file_open_state );
-		void CloseFile( TFile*& f );
+		void SetFile( TString file, TFile*& f, TString file_open_state );	// Base function for SetInput and SetOutput file functions
+		void CloseFile( TFile*& f );	// Base function for CloseInput and CloseOutput functions
 		
 		AlphaSpectrumManipulator();
 		virtual ~AlphaSpectrumManipulator();

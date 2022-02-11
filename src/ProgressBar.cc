@@ -2,7 +2,7 @@
 
 ProgressBar::ProgressBar( int max_entries ){
 	fMaxEntries = max_entries;
-	fProgressPercentage = 1;
+	fProgressPercentage = 1;		// Change every 1% as default
 	ResetProgress();
 }
 // --------------------------------------------------------------------------------------------- //
@@ -33,13 +33,14 @@ TString ProgressBar::GetProgressBar(){
 	TString bar = "[";
 	int num_bars = (int)( fCurrentPercentage*bar_width/100 );
 	
-	for ( int i = 0; i < bar_width; i++ ){
-		if ( i < num_bars ){ bar += "="; }
-		else{ bar += " "; }
-	}
-	bar += "]";
+	// Append progress
+	bar.Append('=', num_bars );
+	bar.Append(' ', bar_width - num_bars );
+	bar.Append(']');
 	return bar;
 }
+// --------------------------------------------------------------------------------------------- //
+// Change precision if you want more precise printed percentage
 void ProgressBar::PrintProgress(){
 	std::cout << GetProgressBar() << std::setw(3) << std::setprecision(0) << std::fixed << fCurrentPercentage << " %\r" << std::flush;
 	return;

@@ -10,6 +10,11 @@
 #include <vector>
 
 // Put global variables in here to use
+
+// Define the directories used (if none offered, it will print in the folder you are currently running the script from)
+const TString gImageDirectory = "images";
+const TString gImageFileType = "png";
+
 // ISS Array Info
 const int NumberOfArrayModules = 3;
 const int NumberOfArrayASICs = 6;
@@ -26,9 +31,9 @@ const int gAlphaHistLB = 150;
 const int gAlphaHistUB = 700;
 
 // FITTING PARAMETERS
-const double gPeakHeightThresholdFraction = 0.15;	// The smallest fraction that is allowed as a peak
-const double gPeakHeightDipFraction = 0.6;			// Ensure that the peak has dipped to this fraction of its height before being ready to record another peak --> this might be too much if you have multiplets...
-const int gPeakChannelLowerThreshold = 350;			// Set to 0 if you want to sample the whole range of the histograms
+const double gPeakHeightThresholdFraction = 0.15;	// The smallest fraction that is allowed as a peak (between 0 and 1)
+const double gPeakHeightDipFraction = 0.6;			// Ensure that the peak has dipped to this fraction of its height before being ready to record another peak --> this might be awkward if you have multiplets...
+const int gPeakChannelLowerThreshold = 350;			// Set to 0 if you want to sample peaks from the whole range of the histograms
 
 // FUNCTIONS
 TString SpectrumNameGenerator( unsigned char mod, unsigned char asic, unsigned char ch );

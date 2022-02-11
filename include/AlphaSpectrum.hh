@@ -19,9 +19,9 @@ class AlphaSpectrum : public TNamed{
 		bool fIsEmpty;				// Boolean that alerts the generator if a given spectrum is empty or not
 		
 		// FITTING STUFF
-		std::vector<int> fPeakLocations;	// Stores the channels where peaks are found
+		std::vector<int> fPeakLocations;	// Stores the channels where peaks are found -- used for more complex fitting (if needed)
 		
-		// Initialisation
+		// INITIALISE FUNCTION (used by both constructors)
 		void Initialise();
 		
 	public:
@@ -32,7 +32,7 @@ class AlphaSpectrum : public TNamed{
 		inline void SetChannel( int a ){ fChannel = a; }
 		inline void SetModule( int a ){ fModule = a; }
 		inline void SetAsic( int a ){ fAsic = a; }
-		void AddPeakLocation( int peak_location );
+		void AddPeakLocation( int peak_location );	// Adds a peak to the fPeakLocations vector
 		
 		inline unsigned int GetChannel(){ return fChannel; }
 		inline unsigned int GetModule(){ return fModule; }
@@ -42,8 +42,8 @@ class AlphaSpectrum : public TNamed{
 		
 		inline int GetPeakChannel( int i ){ return fPeakLocations[i]; }
 		
-		void CreateHistogram();
-		void CheckIsEmpty();
+		void CreateHistogram();	// Initialises fHist object for storing the alpha data
+		void CheckIsEmpty();	// Checks if the fHist contains any entries
 		inline void FillHistogram( double a ){ fHist->Fill(a); }
 		inline bool IsEmpty(){ return fIsEmpty; }
 		
